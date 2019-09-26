@@ -1,0 +1,113 @@
+﻿@model LostandFound.Models.User
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserPassWord)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserPassWord)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StudentID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudentID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Que1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Que1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ans1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ans1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Que2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Que2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ans2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ans2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Message)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Image)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

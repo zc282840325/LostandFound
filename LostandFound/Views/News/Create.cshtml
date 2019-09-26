@@ -1,0 +1,132 @@
+﻿@model LostandFound.Models.Goods
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+<script type="text/javascript">
+    function uploadPhoto() {
+        document.querySelector('#inputimg').value = null;
+        $("#inputimg").click();
+    }
+    $(function () {
+        var time = new Date();
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day);
+        $("#Date").val(today);
+       
+        document.getElementById("inputimg").addEventListener("change", function (e) {
+            var formData = new FormData();
+            formData.append("file1", document.getElementById("inputimg").files[0]);
+            $.ajax({
+                url: "/Home/UpLoadProcess",
+                type: 'POST',
+                data: formData,
+                async: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    if (msg.error == 0) {
+                        $("#imgSrc").attr("src", msg.message);
+                        $("#imgSrc").attr("data-imgurl", msg.message);
+                        $("#GoodsImage").val(msg.message);
+                    }
+                },
+                error: function (msg) {
+                    alert(msg.error);
+                }
+            });
+        })
+    })
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Goods</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.TID, "TID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("TID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GoodsName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GoodsName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GoodsName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GoodsImage, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GoodsImage, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GoodsImage, "", new { @class = "text-danger" })
+            </div>
+            <input type="file" id="inputimg" name="img_file" style="display:none">
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="date" id="Date" name="Date" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" name="Status" id="Status">
+                    <option value="Found">Found</option>
+                    <option value="Lost">Lost</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+    <div style="position:absolute;top:20%;left:60%;text-align:center;">
+        <img src="~/Content/Image/add.jpg" width="200" height="200" onclick="uploadPhoto()" id="imgSrc" />
+        <h4>Click on the image above to upload an avatar</h4>
+    </div>
+}
+
+<div>
+    <a href="javascript:history.go(-1)">Back</a>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

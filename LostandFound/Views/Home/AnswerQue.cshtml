@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "AnswerQue";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" id="list">
+    <h4>Please enter you answer of the security question.</h4>
+    @using (Html.BeginForm("AnswerQue", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+        <div class="form-group">
+        <label class="control-label col-md-2">List of Questions:</label>
+        <div class="col-md-10">
+            <select name="Que" class="form-control">
+                @foreach (var item in ViewData["Que"] as List<string>)
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
+            </div>
+        </div>
+       
+            <div class="form-group">
+                <label class="control-label col-md-2">Answer:</label>
+                <div class="col-md-10">
+                    <input type="text" name="Ans" class="form-control" />
+                    <span class="text-danger">@ViewBag.Msg</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Confirm" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+        }
+
+
+    </div>
+
+

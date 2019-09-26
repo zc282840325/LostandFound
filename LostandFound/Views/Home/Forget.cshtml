@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Forget";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Forget</h2>
+
+<div class="row" id="list">
+    <h4>Please enter you email.</h4>
+    <h4>A link will be sent your email addres.Please follow the instruction to reset your password.</h4>
+    @using (Html.BeginForm("Forget", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label class="control-label col-md-2">Email:</label>
+                <div class="col-md-10">
+                    <input type="text" name="Email" class="form-control" />
+                    <span class="text-danger">@ViewBag.Msg</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Confirm" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    }
+
+    
+</div>

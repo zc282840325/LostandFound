@@ -1,0 +1,57 @@
+﻿using LostandFound.Models;
+using System.Linq;
+using System.Web.Mvc;
+
+namespace LostandFound.Controllers
+{
+    public class LostItemController : Controller
+    {
+        private Model1 db = new Model1();
+        public LostandFound.Tools.Tools tools = new LostandFound.Tools.Tools();
+        // GET: LostItem
+        public ActionResult Index()
+        {
+            var list = db.ItemType.Where(x => x.FID == 0);
+
+            return View(list);
+        }
+
+        public ActionResult Find(int? FID, string Name)
+        {
+            ViewBag.Title = Name;
+            var list = db.ItemType.Where(x => x.FID == FID);
+
+            return View(list);
+        }
+
+        public ActionResult DetailsList(int? TID, string Name)
+        {
+            ViewBag.Title = Name;
+            var list = db.Goods.Where(x => x.TID == TID);
+
+            return View(list);
+        }
+
+        public ActionResult Details(int? GID)
+        {
+            var list = db.Goods.Where(x => x.GID == GID);
+            return View(list);
+        }
+        public ActionResult Found()
+        {
+            string str_s = string.Empty;
+
+            if (Request.Cookies["UID"] == null)
+            {
+                ViewBag.Msg = "You are not logged in, please log in first, please do this!";
+            }
+            else
+            {
+                ViewBag.Msg = "You can contact the administrator:" +
+                    " Mobile: 18869874562" +
+                    "E - mail: 7485487489@qq.com";
+            }
+            return View();
+        }
+    }
+}

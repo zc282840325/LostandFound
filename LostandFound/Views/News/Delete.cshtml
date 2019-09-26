@@ -1,0 +1,81 @@
+﻿@model LostandFound.Models.Goods
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Goods</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemType.TypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemType.TypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GoodsName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GoodsName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GoodsImage)
+        </dt>
+
+        <dd>
+            <img src="@Model.GoodsImage" width="200" height="200"/>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+<div class="form-actions no-color">
+    <input type="submit" value="Delete" class="btn btn-default" /> |
+    <a href="javascript:history.go(-1)">Back</a>
+</div>
+    }
+</div>

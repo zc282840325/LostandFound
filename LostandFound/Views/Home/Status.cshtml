@@ -1,0 +1,36 @@
+﻿@model IEnumerable<LostandFound.Models.UserGoodsOut>
+@{
+    ViewBag.Title = "Status";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>My Status</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GoodName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.GoodName)
+        </td>
+        <td>
+          
+              @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td> 
+            <a href="/LostItem/Details?GID=@item.GID">Details</a>
+        </td>
+    </tr>
+}
+
+</table>

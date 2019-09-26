@@ -1,0 +1,76 @@
+﻿@model LostandFound.Models.Goods
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Goods</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemType.TypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemType.TypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GoodsName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GoodsName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GoodsImage)
+        </dt>
+
+        <dd>
+            <img src="@Model.GoodsImage" width="200" height="200" />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<hr />
+<p>Please <a href="/LostItem/Found">Click here</a> to see instruction</p>
+<p>
+    <a href="javascript:history.go(-1)">Back</a>
+</p>

@@ -1,0 +1,107 @@
+﻿@model LostandFound.Models.User
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserPassWord)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserPassWord)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StudentID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudentID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Que1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Que1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ans1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ans1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Que2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Que2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ans2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ans2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Message)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Image)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

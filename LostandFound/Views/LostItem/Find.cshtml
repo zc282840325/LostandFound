@@ -1,0 +1,22 @@
+﻿@model IEnumerable<LostandFound.Models.ItemType>
+@using LostandFound.Models;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h2>@ViewBag.Title</h2>
+
+<div class="row">
+    @foreach (ItemType item in Model)
+    {
+        <div class="col-md-4" style="text-align:center;">
+            <h3>@item.TypeName</h3>
+            <p>
+                <a href="/LostItem/DetailsList?TID=@item.TID&Name=@item.TypeName"><img src="@item.Image" width="200" height="200" /></a>
+            </p>
+        </div>
+
+    }
+</div>
+
+

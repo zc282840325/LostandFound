@@ -1,0 +1,158 @@
+﻿@model LostandFound.Models.User
+
+@{
+    ViewBag.Title = "Regist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Regist</h2>
+
+<script type="text/javascript">
+    function uploadPhoto() {
+        document.querySelector('#inputimg').value = null;
+        $("#inputimg").click();
+    }
+    $(function () {
+        document.getElementById("inputimg").addEventListener("change", function (e) {
+            var formData = new FormData();
+            formData.append("file1", document.getElementById("inputimg").files[0]);
+            $.ajax({
+                url: "/Home/UpLoadProcess",
+                type: 'POST',
+                data: formData,
+                async: false,
+                contentType: false,
+                processData: false,
+                success: function (msg) {
+                    if (msg.error == 0) {
+                        $("#imgSrc").attr("src", msg.message);
+                        $("#imgSrc").attr("data-imgurl", msg.message);
+                        $("#Image").val(msg.message);
+                    }
+                },
+                error: function (msg) {
+                    alert(msg.error);
+                }
+            });
+        })
+    })
+</script>
+@using (Html.BeginForm("Regist","Home",FormMethod.Post)) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.UserPassWord, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.UserPassWord, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.UserPassWord, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.StudentID, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.StudentID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.StudentID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Que1, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="form-control" name="Que1">
+                @*@foreach (var item in @ViewData["Ques"] as List<string>)
+        {
+            <option value="@item">@item</option>
+        }*@
+                <option value="What is your favorite fruit？">What is your favorite fruit？</option>
+                <option value="What is your favorite place to go?">What is your favorite place to go?</option>
+                <option value="What song do you like the most?">What song do you like the most?</option>
+
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Ans1, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Ans1, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Ans1, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Que2, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="form-control" name="Que2" id="Que2">
+                <option value="What is your favorite fruit？">What is your favorite fruit？</option>
+                <option value="What is your favorite place to go?">What is your favorite place to go?</option>
+                <option value="What song do you like the most?">What song do you like the most?</option>
+
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Ans2, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Ans2, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Ans2, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Message, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+        </div>
+        <input type="file" id="inputimg" name="img_file" style="display:none">
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default"  />
+        </div>
+    </div>
+    <div style="position:absolute;top:20%;left:60%;text-align:center;">
+        <img src="~/Content/Image/add.jpg" width="200" height="200" onclick="uploadPhoto()" id="imgSrc"/>
+        <h4>Click on the image above to upload an avatar</h4>
+    </div>
+   
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to Login", "Login")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

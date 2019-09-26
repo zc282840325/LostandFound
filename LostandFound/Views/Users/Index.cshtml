@@ -1,0 +1,103 @@
+﻿@model IEnumerable<LostandFound.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Users Manager</h2>
+<p>
+    @Html.ActionLink("User Manage", "UserList")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserPassWord)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Que1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ans1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Que2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ans2)
+        </th>
+        <th>
+       
+            @Html.DisplayNameFor(model => model.Image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserPassWord)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StudentID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Que1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Ans1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Que2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Ans2)
+        </td>
+        <td>
+            <img src="@item.Image" height="50" width="50" />
+        </td>
+        <td>
+            @if (item.Status == "0")
+            {
+                <span style="color:green;">News</span>
+            }
+            else if (item.Status == "1")
+            {
+                <span style="color:blue;">User</span>
+            }
+            else
+            {
+                <span style="color:red;">Admin</span>
+            }
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { id = item.UID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.UID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.UID }) |*@
+            @if (item.Status == "0")
+            {
+                @Html.ActionLink("Approve", "Approve", new { id = item.UID })
+            }
+        </td>
+    </tr>
+}
+
+</table>

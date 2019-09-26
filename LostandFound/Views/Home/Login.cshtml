@@ -1,0 +1,56 @@
+﻿@model LostandFound.Models.User
+@{
+    Layout = null;
+
+}
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/Content/Site.css" rel="stylesheet" />
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+        {
+     
+            @Html.AntiForgeryToken()
+        <div class="form-horizontal" style="border:10px solid gray;width:40%;margin:0 auto;text-align:center;padding:20px;border-bottom-left-radius:inherit;">
+            <h2>Login</h2>
+            <div style="width:120px; height:120px; border-radius:50%; overflow:hidden;text-align:center;margin:0 auto;">
+                <img src="~/Content/Image/login.jpg"  width="150" height="150" style="border-radius:50px;" />
+                </div>
+                 <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group" style="margin-left:10%;">
+                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-left:10%;">
+                    @Html.LabelFor(model => model.UserPassWord, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="password" name="UserPassWord" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.UserPassWord, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <span class="text-danger">@ViewBag.Msg</span>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Login" class="btn btn-success" />
+                        <a href="/Home/Regist" class="btn btn-default">Regist</a>
+                    </div>
+                </div>
+
+                <a href="/Home/Forget">Forget Password？</a>
+            </div>
+            }
+        </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<LostandFound.Models.Goods>
+@using LostandFound.Models;
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+    function Found() {
+         $.ajax({
+             type: "Post",
+             url: "/LostItem/Found",
+             dataType: "json",
+             success: function (data) {
+                 alert("dasd");   
+             }, Error: function (x) {
+                 alert(x);
+         }
+         });
+    }
+</script>
+<h2>Details</h2>
+@foreach (Goods item in Model)
+{
+    <div class="jumbotron" style="text-align:left;">
+        <p>Item1:@item.GoodsName</p>
+        <p><img src="@item.GoodsImage" width="200" height="200" /></p>
+        <p>Found Date:@item.Date</p>
+        <p>ItemID:@item.GID</p>
+        <p>Item Description:@item.Description</p>
+        <hr />
+        <p>Please <a href="/LostItem/Found">Click here</a> to see instruction</p>
+    </div>
+}
