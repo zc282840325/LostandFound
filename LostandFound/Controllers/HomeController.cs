@@ -1,7 +1,8 @@
-﻿using LostandFound.Models;
+﻿ using LostandFound.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -22,6 +23,9 @@ namespace LostandFound.Controllers
             }
             else
             {
+                var goods = db.Goods.ToList();
+                goods = goods.OrderByDescending(x=>x.Date).Take(5).ToList();
+                ViewData["Goods"] = goods;
                 return View();
             }
         }
@@ -95,6 +99,7 @@ namespace LostandFound.Controllers
         [HttpGet]
         public ActionResult Regist()
         {
+            ViewBag.Msg = "";
             List<string> vs = new List<string>() { "What is your favorite fruit？", "What is your favorite place to go?", "What song do you like the most?" };
 
             ViewData["Ques"] = vs;
@@ -105,10 +110,22 @@ namespace LostandFound.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.Msg = "";
                 return View(user);
             }
             else
             {
+                if (db.User.Where(x => x.UserName == user.UserName).Count() > 0)
+                {
+                    ViewBag.Msg = "Current username is already registered";
+                    return View(user);
+                }
+                if (db.User.Where(x => x.StudentID == user.StudentID).Count() > 0)
+                {
+                    ViewBag.Msg = "Current StudentID is already registered";
+                    return View(user);
+                }
+                user.Status = "0";
                 db.User.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Login");
@@ -354,9 +371,13 @@ namespace LostandFound.Controllers
                 string type = item.Type.Trim();
                 if (type == "0")
                 {
-                    str = "Processing";
+                    str = "Approval";
                 }
                 else if (type == "1")
+                {
+                    str = "Processing";
+                }
+                else if (type == "2")
                 {
                     str = "Finish";
                 }
@@ -378,7 +399,7 @@ namespace LostandFound.Controllers
                         join u in db.UserGoods on
                         g.GID equals u.GID
                         where u.UID == uid
-                        where u.Type=="0"
+                        where u.Type=="1"
                         select g;
 
 
@@ -398,6 +419,34 @@ namespace LostandFound.Controllers
         public ActionResult Edit(Goods goods)
         {
             return View();
+        }
+
+        public ActionResult GetMessage()
+        {
+            string str_s = string.Empty;
+            bool b_result = false;
+
+            if (Request.Cookies["UID"]!=null)
+            {
+                HttpCookie uidcookie = Request.Cookies["UID"];
+                int uid = Convert.ToInt32(uidcookie.Value);
+
+                var user = db.User.Find(uid);
+                string msg = user.Message;
+                if (string.IsNullOrEmpty(msg))
+                {
+                    b_result = false;
+                }
+                else
+                {
+                    b_result = true;
+                    user.Message = string.Empty;
+                    db.Entry<User>(user).State = EntityState.Modified;
+                    db.SaveChanges();
+                    str_s = msg;
+                }
+            }
+            return Content("{\"b_result\":\"" + b_result + "\",\"str_s\":\"" + str_s + "\"}", "json");
         }
     }
 }

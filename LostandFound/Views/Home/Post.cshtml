@@ -60,9 +60,10 @@
             @Html.DisplayFor(modelItem => item.Status)
         </td>
         <td>
-            <a href="/News/Edit?id=@item.GID">Edit</a>|
+            <a href="/News/Edit?id=@item.GID">Edit</a> |
             <a href="/News/Details?id=@item.GID">Details</a> |
-            <a href="/News/Delete?id=@item.GID">Delete</a>
+            <a href="/News/Delete?id=@item.GID">Delete</a> |
+            <a href="/News/FinishedTask?id=@item.GID">Finished</a> 
         </td>
     </tr>
 }

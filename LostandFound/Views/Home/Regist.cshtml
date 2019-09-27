@@ -55,7 +55,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.UserPassWord, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.UserPassWord, new { htmlAttributes = new { @class = "form-control" } })
+            <input type="password" name="UserPassWord" id="UserPassWord" class="form-control"/>
             @Html.ValidationMessageFor(model => model.UserPassWord, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -117,14 +117,7 @@
         <div class="col-md-10">
             @Html.EditorFor(model => model.Ans2, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Ans2, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Message, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+            <input type="hidden" name="Message" id="Message" value="" />
         </div>
     </div>
     <div class="form-group">
@@ -145,6 +138,7 @@
         <img src="~/Content/Image/add.jpg" width="200" height="200" onclick="uploadPhoto()" id="imgSrc"/>
         <h4>Click on the image above to upload an avatar</h4>
     </div>
+    <p style="font-size:20px;" class="text-danger">@ViewBag.Msg</p>
    
 </div>
 }

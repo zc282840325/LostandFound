@@ -1,0 +1,105 @@
+﻿@model IEnumerable<LostandFound.Models.Message>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Message Management</h2>
+
+<script type="text/javascript">
+
+    var uid = 0;
+    var mid = 0;
+    function OpenPanle() {
+        debugger;
+          var message = $("#message").val();
+         if (message == "") {
+                $("#error").html("Message is Request");
+            }
+            else {
+                $.ajax({
+                      type:"Post",
+                      url: "/MessageManagement/Save",
+                      data: {"message":message,"mid":mid,"uid":uid},
+                      dataType:"json",
+                    success: function (data) {
+                        
+                        location.reload();
+                        alert(data.str_s);
+                    }
+                   
+                });
+            }
+    }
+
+    function Reply1(obj) {
+        debugger;
+        $('#myModal').modal();
+        mid = obj.parentNode.parentNode.children[0].value;
+         uid=obj.parentNode.parentNode.children[1].value;
+    }
+
+</script>
+<table class="table">
+    <tr>
+        <th>
+            Message
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+
+    <input type="hidden" value="@item.MID" />
+    <input type="hidden" value="@item.UID" />
+    <td>
+        @Html.DisplayFor(modelItem => item.Message1)
+    </td>
+    <td>
+        @if (item.Status == "0")
+        {
+            <span style="color:green;">News</span>
+        }
+        else
+        {
+            <span style="color:gray;">Processed</span>
+        }
+    </td>
+    <td>
+        <a href="#" onclick="Reply1(this)">Reply</a>
+    </td>
+</tr>
+               }
+
+    </table>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Reply</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="txt_departmentname">Reply Message</label>
+                    <textarea class="form-control" placeholder="Reply Message" id="message" style="height:200px;"></textarea>
+                    <input type="hidden" id="uid"/>
+                    <span class="text-danger" id="error"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Close</button>
+                <button type="button" onclick="OpenPanle()" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>Save</button>
+            </div>
+        </div>
+    </div>
+</div>

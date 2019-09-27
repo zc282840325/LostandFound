@@ -57,11 +57,11 @@ namespace LostandFound.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Status = "0";
                 db.User.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             return View(user);
         }
 

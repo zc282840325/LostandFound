@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LostandFound.Models;
+using PagedList;
 
 namespace LostandFound.Controllers
 {
@@ -15,14 +16,39 @@ namespace LostandFound.Controllers
         private Model1 db = new Model1();
 
         // GET: News
-        public ActionResult Index()
+        public ActionResult Index(int? page, string GoodsName)
         {
             var goods = db.Goods.Include(g => g.ItemType);
-            return View(goods.ToList());
+            int pageNumber = page ?? 1;
+
+            int pageSize = 5;
+            if (string.IsNullOrEmpty(GoodsName))
+            {
+                goods = goods.OrderByDescending(x => x.Date);
+            }
+            else
+            {
+                goods = goods.Where(x=>x.GoodsName.Contains(GoodsName)).OrderByDescending(x => x.Date);
+            }
+           
+
+            IPagedList<Goods> pagedList = goods.ToPagedList(pageNumber, pageSize);
+
+            return View(pagedList);
         }
         public ActionResult ItemManagenment()
         {
             return View();
+        }
+        public ActionResult Approve()
+        {
+            var goods = from g in db.Goods
+                        join u in db.UserGoods on
+                        g.GID equals u.GID
+                        where u.Type=="0"
+                        select g;
+           
+            return View(goods);
         }
 
         public ActionResult Finished()
@@ -39,11 +65,54 @@ namespace LostandFound.Controllers
             var goods = from g in db.Goods
                         join u in db.UserGoods on
                         g.GID equals u.GID
-                        where u.Type == "0"
+                        where u.Type == "1"
                         select g;
             return View(goods);
         }
-        
+
+        public ActionResult ApproveTask(int id)
+        {
+            if (id != default(int))
+            {
+                var goods = db.UserGoods.Where(x => x.GID == id).FirstOrDefault();
+                goods.Type = "1";
+                db.Entry<UserGoods>(goods).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Approve");
+        }
+
+        public ActionResult FinishedTask(int id)
+        {
+            if (id!=default(int))
+            {
+                var goodsUser = db.UserGoods.Where(x => x.GID == id).FirstOrDefault();
+                goodsUser.Type = "3";
+                db.Entry<UserGoods>(goodsUser).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Post","Home");
+        }
+
+        public ActionResult Refuse(string message,int gid)
+        {
+            string str_s = "Successfully Replied!";
+            bool b_result = true;
+
+            var usergoods = db.UserGoods.Where(x => x.GID == gid).FirstOrDefault();
+            int uid = usergoods.UID;
+
+            var user = db.User.Find(uid);
+            user.Message += "Your approval was rejected due to:" + message;
+            db.Entry<User>(user).State = EntityState.Modified;
+            db.SaveChanges();
+
+            db.Goods.Remove(db.Goods.Find(gid));
+            db.SaveChanges();
+
+            return Content("{\"b_result\":\"" + b_result + "\",\"str_s\":\"" + str_s + "\"}", "json");
+        }
+
         // GET: News/Details/5
         public ActionResult Details(int? id)
         {
@@ -62,8 +131,24 @@ namespace LostandFound.Controllers
         // GET: News/Create
         public ActionResult Create()
         {
-            ViewBag.TID = new SelectList(db.ItemType.Where(x => x.FID>= 1 && x.FID<= 4), "TID", "TypeName");
-            return View();
+            if (Request.Cookies["UID"]==null)
+            {
+                if (Request.Cookies["AID"] != null)
+                {
+                    ViewBag.TID = new SelectList(db.ItemType.Where(x => x.FID >= 1 && x.FID <= 4), "TID", "TypeName");
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                ViewBag.TID = new SelectList(db.ItemType.Where(x => x.FID >= 1 && x.FID <= 4), "TID", "TypeName");
+                return View();
+            }
+           
         }
 
         // POST: News/Create
@@ -79,9 +164,12 @@ namespace LostandFound.Controllers
                 {
                     db.Goods.Add(goods);
                     db.SaveChanges();
-                    return RedirectToAction("Progress", "News");
+                    HttpCookie cookie = Request.Cookies["AID"];
+                    int uid = Convert.ToInt32(cookie.Value);
+                    db.UserGoods.Add(new UserGoods() { GID = goods.GID, UID = uid, Type = "1" });
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
-
                 ViewBag.TID = new SelectList(db.ItemType, "TID", "TypeName", goods.TID);
                 return View(goods);
             }
@@ -91,6 +179,12 @@ namespace LostandFound.Controllers
                 {
                     db.Goods.Add(goods);
                     db.SaveChanges();
+
+                    HttpCookie cookie = Request.Cookies["UID"];
+                    int uid = Convert.ToInt32(cookie.Value);
+                    db.UserGoods.Add(new UserGoods() { GID = goods.GID, UID = uid, Type = "0" });
+                    db.SaveChanges();
+
                     return RedirectToAction("Index");
                 }
 
@@ -123,11 +217,21 @@ namespace LostandFound.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "GID,TID,GoodsName,GoodsImage,Description,Date,Address,Status")] Goods goods)
         {
+       
             if (ModelState.IsValid)
             {
                 db.Entry(goods).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                if (Request.Cookies["UID"] == null)
+                {
+                    return RedirectToAction("Progress", "News");
+                }
+                else
+                {
+                    return RedirectToAction("Post", "Home");
+                   
+                }
+              
             }
             ViewBag.TID = new SelectList(db.ItemType, "TID", "TypeName", goods.TID);
             return View(goods);
@@ -153,12 +257,22 @@ namespace LostandFound.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            HttpCookie uidcookie = Request.Cookies["UID"];
-            int uid = Convert.ToInt32(uidcookie.Value);
-            UserGoods goods = db.UserGoods.Where(x => x.GID == id && x.UID == uid).FirstOrDefault();
-            db.Entry<UserGoods>(goods).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToRoute(new { controller = "Home", action = "Post" });
+            if (Request.Cookies["UID"]==null)
+            {
+                db.Goods.Remove(db.Goods.Find(id));
+                db.SaveChanges();
+                return RedirectToAction("Finished", "News"); 
+            }
+            else
+            {
+                HttpCookie uidcookie = Request.Cookies["UID"];
+                int uid = Convert.ToInt32(uidcookie.Value);
+                UserGoods goods = db.UserGoods.Where(x => x.GID == id && x.UID == uid).FirstOrDefault();
+                goods.Type = "3";
+                db.Entry<UserGoods>(goods).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Post", "Home");
+            }
         }
 
         protected override void Dispose(bool disposing)

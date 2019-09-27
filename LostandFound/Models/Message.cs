@@ -18,5 +18,8 @@ namespace LostandFound.Models
         [Required]
         [StringLength(50)]
         public string Message1 { get; set; }
+
+        [StringLength(100)]
+        public string Status { get; set; }
     }
 }

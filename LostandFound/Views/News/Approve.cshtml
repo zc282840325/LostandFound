@@ -1,0 +1,125 @@
+﻿@model IEnumerable<LostandFound.Models.Goods>
+
+@{
+    ViewBag.Title = "Approve";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Approve</h2>
+<script type="text/javascript">
+    var gid = 0;
+        function OpenPanle() {
+        debugger;
+          var message = $("#message").val();
+         if (message == "") {
+                $("#error").html("Message is Request");
+            }
+            else {
+                $.ajax({
+                      type:"Post",
+                      url: "/News/Refuse",
+                      data: {"message":message,"gid":gid},
+                    dataType: "json",
+                      async: false, //更改为同步 
+                    success: function (data) {
+                        
+                        location.reload();
+                        alert(data.str_s);
+                    }
+                   
+                });
+            }
+    }
+
+        function Refuse(obj) {
+        debugger;
+        $('#myModal').modal();
+        gid = obj.parentNode.parentNode.children[0].value;
+    }
+</script>
+<a href="javascript:history.go(-1)">Back</a>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemType.TypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GoodsName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GoodsImage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+      
+<tr>
+    <input type="hidden" value="@item.GID" />
+    <td>
+        @Html.DisplayFor(modelItem => item.ItemType.TypeName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.GoodsName)
+    </td>
+    <td>
+        <img src="@item.GoodsImage" width="50" height="50" />
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Date)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Address)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Status)
+    </td>
+    <td>
+        <a href="/News/ApproveTask?id=@item.GID">Approve</a> |
+        <a href="#" onclick="Refuse(this)">Refuse</a>
+
+    </td>
+</tr>
+    }
+
+</table>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Denial Reason</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="txt_departmentname">Refuse Message</label>
+                    <textarea class="form-control" placeholder="Reply Message" id="message" style="height:200px;"></textarea>
+                    <span class="text-danger" id="error"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Close</button>
+                <button type="button" onclick="OpenPanle()" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>Save</button>
+            </div>
+        </div>
+    </div>
+</div>
