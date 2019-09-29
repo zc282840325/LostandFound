@@ -56,7 +56,7 @@ namespace LostandFound.Controllers
                 var goodsUser = db.UserGoods.Where(x => x.GID == id).FirstOrDefault();
                 var user = db.User.Find(goodsUser.UID);
                 var goods = db.Goods.Find(goodsUser.GID);
-                if (goods.Status=="Found")
+                if (goods.Status!="Found")
                 {
                     ViewBag.Msg = "You can contact the User:\r\nE - mail:" + user.Email + "StudentID:" + user.StudentID;
                 }
