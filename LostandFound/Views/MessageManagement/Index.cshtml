@@ -72,7 +72,8 @@
         }
     </td>
     <td>
-        <a href="#" onclick="Reply1(this)">Reply</a>
+        <a href="#" onclick="Reply1(this)">Reply</a>  |
+        @Html.ActionLink("Delete", "Delete", new { id = item.MID })
     </td>
 </tr>
                }

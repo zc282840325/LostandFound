@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,9 +14,31 @@ namespace LostandFound.Controllers
         private Model1 db = new Model1();
         public ActionResult Index()
         {
-
             return View(db.Message.ToList());
         }
+        [HttpGet]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Message goods = db.Message.Find(id);
+            if (goods == null)
+            {
+                return HttpNotFound();
+            }
+            return View(goods);
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int? id)
+        {
+           db.Message.Remove(db.Message.Find(id));
+           db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
 
         public ActionResult Save(string message,int mid,int uid)
         {
