@@ -18,7 +18,7 @@ namespace LostandFound.Controllers
         // GET: News
         public ActionResult Index(int? page, string GoodsName)
         {
-            var goods = db.Goods.Include(g => g.ItemType);
+            var goods = db.Goods.Include(g => g.ItemType).Where(x=>x.Status== "Lost");
             int pageNumber = page ?? 1;
 
             int pageSize = 5;

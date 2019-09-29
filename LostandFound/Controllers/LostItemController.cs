@@ -27,11 +27,12 @@ namespace LostandFound.Controllers
         public ActionResult DetailsList(int? TID, string Name)
         {
             ViewBag.Title = Name;
-            var list = from g in db.Goods
+            var list =  from g in db.Goods
                         join u in db.UserGoods on
                         g.GID equals u.GID
                         where u.Type == "1"
                         where g.TID==TID
+                        where g.Status== "Found"
                         select g;
 
             return View(list);
@@ -49,16 +50,21 @@ namespace LostandFound.Controllers
             if (Request.Cookies["UID"] == null)
             {
                 ViewBag.Msg = "You are not logged in, please log in first, please do this!";
-                ViewBag.Admin = "";
             }
             else
             {
                 var goodsUser = db.UserGoods.Where(x => x.GID == id).FirstOrDefault();
                 var user = db.User.Find(goodsUser.UID);
-                ViewBag.Msg = "You can contact the User:\r\nE - mail:" + user.Email + "StudentID:" + user.StudentID;
-                ViewBag.Admin = "You can contact the administrator: " +
-                    " Mobile: 18869874562" +
-                    "E - mail: 7485487489@qq.com";
+                var goods = db.Goods.Find(goodsUser.GID);
+                if (goods.Status=="Found")
+                {
+                    ViewBag.Msg = "You can contact the User:\r\nE - mail:" + user.Email + "StudentID:" + user.StudentID;
+                }
+                else
+                {
+                    ViewBag.Msg = "You can contact the Admin:\r\nE - mail:admin@admin.com, Tel:**************";
+
+                }
             }
             return View();
         }
